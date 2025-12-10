@@ -2,6 +2,7 @@
 title: Linux Shell
 date: 2024-10-24 11:06:05
 excerpt: "1024心血来潮买了个域名，刚好阿里云可以白嫖免费服务器，那就把博客公之于众吧~顺便学习linux，所以就有本文章记录常用的Linux命令"
+thumbnail: https://s21.ax1x.com/2025/04/16/pEfjSDe.png
 tags:
   - "Linux"
 categories:

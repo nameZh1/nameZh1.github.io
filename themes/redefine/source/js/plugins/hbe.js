@@ -1,5 +1,6 @@
 import { main } from "../main.js";
 import { initTOC } from "../layouts/toc.js";
+import { showCustomAlert } from './zh1.js'; 
 
 export function initHBE() {
   const cryptoObj = window.crypto || window.msCrypto;
@@ -186,7 +187,7 @@ export function initHBE() {
     );
     console.log(`Verification result: ${result}`);
     if (!result) {
-      alert(wrongHashMessage);
+      showCustomAlert(wrongHashMessage);
       console.log(`${wrongHashMessage}, got `, signature, ` but proved wrong.`);
     }
     return result;
@@ -247,7 +248,7 @@ export function initHBE() {
         return await verifyContent(hmacKey, decoded);
       })
       .catch((e) => {
-        alert(wrongPassMessage);
+        showCustomAlert(wrongPassMessage);
         console.log(e);
         return false;
       });

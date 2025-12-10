@@ -122,10 +122,10 @@ home_banner:
   style: fixed # static or fixed
   # Home banner image
   image: 
-    # light: /images/wallhaven-wqery6-light.webp # light mode
-    # dark: /images/wallhaven-wqery6-dark.webp # dark mode
-    light: /images/light-bg.png # light mode
-    dark: /images/dark-bg.png # dark mode
+    light: /images/wallhaven-wqery6-light.webp # light mode
+    dark: /images/wallhaven-wqery6-dark.webp # dark mode
+    # light: /images/light-bg.png # light mode
+    # dark: /images/dark-bg.png # dark mode
   # Home banner title
   title: COMPETE WITH SHADOW
   # Home banner subtitle
