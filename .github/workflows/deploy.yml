@@ -1,0 +1,113 @@
+# ============================================================
+# GitHub Actions 工作流配置文件
+# 文件位置：.github/workflows/deploy.yml
+# 作用：当代码推送到 master 分支时，自动构建并部署 Hexo 博客
+# ============================================================
+
+# 工作流名称，会显示在 GitHub 仓库的 Actions 标签页中
+name: Deploy Blog
+
+# ============================================================
+# 触发条件配置
+# on: 定义什么情况下触发这个工作流
+# ============================================================
+on:
+  push:
+    branches:
+      - master  # 当推送到 master 分支时触发
+                # 如果你的主分支是 main，需要改成 main
+  
+  # 可选：允许手动触发工作流
+  workflow_dispatch:
+
+# ============================================================
+# 作业配置
+# jobs: 定义要执行的任务
+# ============================================================
+jobs:
+  # 作业名称：build-and-deploy（构建并部署）
+  build-and-deploy:
+    # 运行环境：使用最新版本的 Ubuntu 系统
+    runs-on: ubuntu-latest
+    
+    # ========================================================
+    # 步骤配置
+    # steps: 定义作业中要执行的具体步骤
+    # ========================================================
+    steps:
+      # ------------------------------------------------------
+      # 步骤 1：检出代码
+      # 从 GitHub 仓库拉取代码到运行环境
+      # ------------------------------------------------------
+      - name: Checkout
+        uses: actions/checkout@v4  # 使用官方的 checkout action
+        with:
+          submodules: true         # 同时拉取 Git 子模块（如主题）
+          fetch-depth: 0           # 获取完整的 git 历史记录
+
+      # ------------------------------------------------------
+      # 步骤 2：设置 Node.js 环境
+      # 安装指定版本的 Node.js
+      # ------------------------------------------------------
+      - name: Setup Node.js
+        uses: actions/setup-node@v4  # 使用官方的 setup-node action
+        with:
+          node-version: '20'         # 使用 Node.js 20.x 版本
+                                     # 建议使用 LTS 版本
+
+      # ------------------------------------------------------
+      # 步骤 3：安装 pnpm
+      # 使用 pnpm 作为包管理器（更快、更节省磁盘空间）
+      # ------------------------------------------------------
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8                 # pnpm 版本
+
+      # ------------------------------------------------------
+      # 步骤 4：缓存依赖
+      # 缓存 node_modules，加快后续构建速度
+      # ------------------------------------------------------
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
+      # ------------------------------------------------------
+      # 步骤 5：安装项目依赖
+      # 安装 package.json 中定义的所有依赖
+      # ------------------------------------------------------
+      - name: Install dependencies
+        run: pnpm install
+
+      # ------------------------------------------------------
+      # 步骤 6：构建静态文件
+      # 执行 hexo clean 和 hexo generate 生成静态网站
+      # ------------------------------------------------------
+      - name: Build
+        run: |
+          pnpm clean
+          pnpm build
+
+      # ------------------------------------------------------
+      # 步骤 7：部署到 GitHub Pages
+      # 将生成的静态文件部署到 gh-pages 分支
+      # ------------------------------------------------------
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          # GitHub Token，用于推送到仓库
+          # GITHUB_TOKEN 是 GitHub Actions 自动提供的
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          
+          # 要部署的目录（Hexo 生成的静态文件目录）
+          publish_dir: ./public
+          
+          # 部署到的分支
+          publish_branch: gh-pages
+          
+          # 提交信息
+          commit_message: 'Deploy: ${{ github.event.head_commit.message }}'
