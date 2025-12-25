@@ -1,13 +1,14 @@
 ---
-title: aboutMe
-date: 2024-09-26 09:23:24
+title: 关于我
+date: 2024-09-25 12:00:00
 ---
 
-- **姓名**：zh1  
-- **所在地**：广西
-- **邮箱**：8341978886@qq.com  
-- **GitHub**: [@zh1](https://github.com/nameZh1)  
-- **博客**: [COMPETE WITH SHADOW](https://xxx.com)
+# 关于我
 
+欢迎来到我的博客！
 
+我是 ZH1，这是我的个人博客网站。
 
+## 联系方式
+
+- GitHub: [nameZh1](https://github.com/nameZh1)
