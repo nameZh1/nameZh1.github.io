@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="ZH1">
+    
+    <!-- Completely eliminate flash of wrong theme -->
+    <script>
+        (function() {
+            const THEME_KEY = "REDEFINE-THEME-STATUS";
+            const DARK = "dark", LIGHT = "light";
+            
+            // Get preferred theme
+            function getTheme() {
+                try {
+                    const saved = localStorage.getItem(THEME_KEY);
+                    if (saved) {
+                        const { isDark } = JSON.parse(saved);
+                        return isDark ? DARK : LIGHT;
+                    }
+                } catch (e) {}
+                
+                return matchMedia("(prefers-color-scheme: dark)").matches ? DARK : LIGHT;
+            }
+            
+            // Apply theme to document
+            function applyTheme(theme) {
+                const isDark = theme === DARK;
+                const root = document.documentElement;
+                
+                // Set classes for compatibility
+                root.classList.add(theme);
+                root.classList.remove(isDark ? LIGHT : DARK);
+                root.style.colorScheme = theme;
+            }
+            
+            // Initial application
+            const theme = getTheme();
+            applyTheme(theme);
+            
+            // Listen for system preference changes
+            matchMedia("(prefers-color-scheme: dark)").addEventListener("change", ({ matches }) => {
+                // Only update if using system preference (no localStorage entry)
+                if (!localStorage.getItem(THEME_KEY)) {
+                    applyTheme(matches ? DARK : LIGHT);
+                }
+            });
+            
+            // Set body classes ASAP (before DOMContentLoaded)
+            (function() {
+                const addBodyClass = () => {
+                    const b = document.body;
+                    if (!b) return false;
+                    b.classList.add(theme + "-mode");
+                    return true;
+                };
+
+                // Try immediately
+                if (addBodyClass()) return;
+
+                // Observe until body exists
+                const mo = new MutationObserver(() => {
+                    if (addBodyClass()) mo.disconnect();
+                });
+                mo.observe(document.documentElement, { childList: true, subtree: true });
+            })();
+        })();
+    </script>
+    
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/2024/10/24/shell/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+    
+    
+        
+        <meta name="description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux Shell">
+<meta property="og:url" content="http://example.com/2024/10/24/Shell/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/redefine-og.webp">
+<meta property="article:published_time" content="2024-10-24T11:06:05.000Z">
+<meta property="article:modified_time" content="2025-12-25T02:55:56.770Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/redefine-og.webp">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/redefine-favicon.JPG" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/redefine-favicon.JPG">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/redefine-favicon.JPG">
+    <!--- Page Info-->
+    
+    <title>
+        
+            Linux Shell | COMPETE WITH SHADOW
+        
+    </title>
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+
+    <!--- Inject Part-->
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/css/build/tailwind.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/GeistMono/geist-mono.css">
+
+    
+<link rel="stylesheet" href="/fonts/Geist/geist.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+    
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"example.com","root":"/","language":"en"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"delete_mask":false,"title_alignment":"left","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":["zh1"]},"code_block":{"copy":true,"style":"mac","highlight_theme":{"light":"github","dark":"vs2015"},"font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"pangu_js":false,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null},"title":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":{"enable":false,"custom_message":null},"side_tools":{"gear_rotation":true,"auto_expand":false},"open_graph":{"enable":true,"image":"/images/redefine-og.webp","description":"Hexo Theme Redefine, Redefine Your Hexo Journey."},"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"COMPETE WITH SHADOW","subtitle":{"text":["loading..."],"hitokoto":{"enable":true,"show_author":true,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"style":"default","links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":true,"type":"fixed","audios":[{"name":"Imagine","artist":"John Lennon","url":"https://evan.beee.top/music/Imagine%20-%20John%20Lennon.mp3","cover":"https://evan.beee.top/music/covers/Lennon_Imagine_Sleeve_1975.jpg","lrc":null},{"name":"Something Just Like This","artist":"Coldplay","url":"https://evan.beee.top/music/Something%20Just%20Like%20This%20-%20The%20Chainsmokers%E3%80%81Coldplay.mp3","cover":"https://evan.beee.top/music/covers/Something_Just_Like_This.png"}]},"mermaid":{"enable":false,"version":"11.4.1"}},"version":"2.8.5","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Essays":{"path":"/essays","icon":null},"About":{"icon":"fa-regular fa-user","submenus":{"Me":"/aboutMe","Github":"https://github.com/nameZh1"}}},"search":{"enable":true,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":null},"article_date_format":"auto","excerpt_length":200,"categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2024/9/25 12:04:26"};
+    window.lang_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+
+<body>
+	<div class="progress-bar-container">
+	
+
+	
+	<span class="pjax-progress-bar"></span>
+	<!--        <span class="swup-progress-icon">-->
+	<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+	<!--        </span>-->
+	
+</div>
+
+<main class="page-container" id="swup">
+
+	
+
+	<div class="main-content-container flex flex-col justify-between min-h-dvh">
+		<div class="main-content-header">
+			<header class="navbar-container px-6 md:px-12">
+    <div class="navbar-content transition-navbar ">
+        <div class="left">
+            
+                <a class="logo-image h-8 w-8 sm:w-10 sm:h-10 mr-3" href="/">
+                    <img src="/images/redefine-favicon.JPG" class="w-full h-full rounded-xs">
+                </a>
+            
+            <a class="logo-title" href="/">
+                
+                COMPETE WITH SHADOW
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    HOME
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/archives"
+                                        >
+                                    <i class="fa-regular fa-archive fa-fw"></i>
+                                    ARCHIVES
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/essays"
+                                        >
+                                    
+                                    ESSAYS
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown"
+                                   href="#"
+                                        onClick=&#34;return false;&#34;>
+                                    <i class="fa-regular fa-user fa-fw"></i>
+                                    ABOUT
+                                    <i class="fa-solid fa-chevron-down fa-fw"></i>
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                        
+                                            <li>
+                                                <a href="/aboutMe">
+                                                    ME
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a target="_blank" rel="noopener" href="https://github.com/nameZh1">
+                                                    GITHUB
+                                                </a>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                    
+                    
+                        <li class="navbar-item search search-popup-trigger">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-dvh w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                HOME
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/archives"
+                        >
+                            <span>
+                                ARCHIVES
+                            </span>
+                            
+                                <i class="fa-regular fa-archive fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/essays"
+                        >
+                            <span>
+                                ESSAYS
+                            </span>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item-sub text-base my-1.5 flex flex-col w-full">
+                        
+                        <div class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary cursor-pointer text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                             navbar-data-toggle="submenu-About"
+                        >
+                            <span>
+                                ABOUT
+                            </span>
+                            
+                                <i class="fa-solid fa-chevron-right fa-sm fa-fw transition-all"></i>
+                            
+                        </div>
+                        
+
+                        
+                            <div class="flex-col items-start px-2 py-2 hidden" data-target="submenu-About">
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           href="/aboutMe">ME</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           target="_blank" rel="noopener" href="https://github.com/nameZh1">GITHUB</a>
+                                    </div>
+                                
+                            </div>
+                        
+                    </li>
+            
+
+            
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">11</div>
+        <div class="label text-third-text-color text-sm">Tags</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">24</div>
+        <div class="label text-third-text-color text-sm">Categories</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">14</div>
+        <div class="label text-third-text-color text-sm">Posts</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+		</div>
+
+		<div class="main-content-body transition-fade-up">
+			
+
+			<div class="main-content">
+				<div class="post-page-container flex relative justify-between box-border w-full h-full">
+	<div class="article-content-container">
+
+		<div class="article-title relative w-full">
+			
+			
+			
+			<img src="https://s21.ax1x.com/2025/04/16/pEfjSDe.png" alt="Linux Shell" class="w-full h-60 sm:h-72 md:h-80 object-cover sm:rounded-t-large dark:brightness-75" />
+			
+			<div class="w-full flex items-center absolute bottom-0 justify-start">
+				<h1 class="article-title-cover text-center mx-6 my-6 text-second-text-color bg-background-color-transparent px-4 py-3 text-3xl sm:text-4xl md:text-5xl font-semibold backdrop-blur-lg rounded-xl border border-border-color ">Linux Shell</h1>
+			</div>
+			
+		</div>
+
+		
+		<div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+			<div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+				<img src="/images/redefine-favicon.JPG">
+			</div>
+			<div class="info flex flex-col justify-between">
+				<div class="author flex items-center">
+					<span class="name text-default-text-color text-lg font-semibold">ZH1</span>
+					
+					<span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">zh1</span>
+					
+				</div>
+				<div class="meta-info">
+					<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2024-10-24 11:06:05</span>
+        <span class="mobile">2024-10-24 11:06:05</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2025-12-25 02:55:56</span>
+            <span class="mobile">2025-12-25 02:55:56</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/API%E6%96%87%E6%A1%A3/">API文档</a>&nbsp;
+                        </li>
+                    
+                    
+                
+                    
+                        
+                            <li>></li>
+                        
+                        <li>
+                            <a href="/categories/API%E6%96%87%E6%A1%A3/Linux/">Linux</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/Linux/">Linux</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+				</div>
+			</div>
+		</div>
+		
+
+		
+
+
+		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+			
+  <div class="note p-4 mb-4 rounded-small markdown-body default">
+    <p>引用自 <a class="link"   target="_blank" rel="noopener" href="https://www.runoob.com/linux/linux-file-content-manage.html" >菜鸟<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
+
+  </div>
+
+
+<h3 id="登录云"><a href="#登录云" class="headerlink" title="登录云"></a>登录云</h3><div class="code-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh username@ip</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="处理目录的常用命令"><a href="#处理目录的常用命令" class="headerlink" title="处理目录的常用命令"></a>处理目录的常用命令</h3><div class="code-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ls #（英文全拼：list files）: 列出目录及文件名</span><br><span class="line">cd #（英文全拼：change directory）：切换目录</span><br><span class="line">pwd #（英文全拼：print work directory）：显示目前的目录</span><br><span class="line">mkdir #（英文全拼：make directory）：创建一个新的目录</span><br><span class="line">rmdir #（英文全拼：remove directory）：删除一个空的目录</span><br><span class="line">cp #（英文全拼：copy file）: 复制文件或目录</span><br><span class="line">rm #（英文全拼：remove）: 删除文件或目录</span><br><span class="line">mv #（英文全拼：move file）: 移动文件与目录，或修改文件与目录的名称</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="ls-列出目录"><a href="#ls-列出目录" class="headerlink" title="ls (列出目录)"></a>ls (列出目录)</h4><p><strong>在 Linux 系统当中， ls 命令可能是最常被运行的。</strong></p>
+<p><em>语法：</em></p>
+<div class="code-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@www ~]# ls [-aAdfFhilnrRSt] 目录名称</span><br><span class="line">[root@www ~]# ls [--color=&#123;never,auto,always&#125;] 目录名称</span><br><span class="line">[root@www ~]# ls [--full-time] 目录名称</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">选项与参数：</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">-a ：全部的文件，连同隐藏文件( 开头为 . 的文件) 一起列出来(常用)</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">-d ：仅列出目录本身，而不是列出目录内的文件数据(常用)</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">-l ：长数据串列出，包含文件的属性与权限等等数据；(常用)</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">将目录下的所有文件列出来(含属性与隐藏档)</span></span><br></pre></td></tr></table></figure></div>
+
+<p><code>[root@www ~]# ls -al ~</code></p>
+<h4 id="cd-切换目录"><a href="#cd-切换目录" class="headerlink" title="cd (切换目录)"></a>cd (切换目录)</h4><p><strong>cd 是 Change Directory 的缩写，这是用来变换工作目录的命令。</strong></p>
+<p><em>语法：</em></p>
+<p><code>cd [相对路径或绝对路径]</code><br>使用 mkdir 命令创建 runoob 目录<br><code>[root@www ~]# mkdir runoob</code></p>
+<p>#使用绝对路径切换到 runoob 目录<br><code>[root@www ~]# cd /root/runoob/</code></p>
+<p>#使用相对路径切换到 runoob 目录<br><code>[root@www ~]# cd ./runoob/</code></p>
+<p>表示回到自己的家目录，亦即是 &#x2F;root 这个目录</p>
+<p><code>[root@www runoob]# cd ~</code></p>
+<p>表示去到目前的上一级目录，亦即是 &#x2F;root 的上一级目录的意思；</p>
+<p><code>[root@www ~]# cd ..</code><br>接下来大家多操作几次应该就可以很好的理解 cd 命令的。</p>
+<p><code>pwd (显示目前所在的目录)</code><br>pwd 是 Print Working Directory 的缩写，也就是显示目前所在目录的命令。</p>
+<p><code>[root@www ~]# pwd [-P]</code><br>选项与参数：</p>
+<p>-P ：显示出确实的路径，而非使用链接 (link) 路径。<br>实例：单纯显示出目前的工作目录：</p>
+<p><code>[root@www ~]# pwd</code><br>&#x2F;root &lt;&#x3D;&#x3D; 显示出目录啦～<br>实例显示出实际的工作目录，而非链接档本身的目录名而已。</p>
+<p><code>[root@www ~]# cd /var/mail</code> &lt;&#x3D;&#x3D;注意，&#x2F;var&#x2F;mail 是一个链接档<br><code>[root@www mail]# pwd</code><br>&#x2F;var&#x2F;mail &lt;&#x3D;&#x3D;列出目前的工作目录<br><code>[root@www mail]# pwd -P</code><br>&#x2F;var&#x2F;spool&#x2F;mail &lt;&#x3D;&#x3D;怎么回事？有没有加 -P 差很多～<br><code>[root@www mail]# ls -ld /var/mail</code><br>lrwxrwxrwx 1 root root 10 Sep 4 17:54 &#x2F;var&#x2F;mail -&gt; spool&#x2F;mail</p>
+<p>看到这里应该知道为啥了吧？因为 &#x2F;var&#x2F;mail 是链接档，链接到 &#x2F;var&#x2F;spool&#x2F;mail</p>
+<p>所以，加上 pwd -P 的选项后，会不以链接档的数据显示，而是显示正确的完整路径啊！</p>
+<p><code>mkdir (创建新目录)</code><br>如果想要创建新的目录的话，那么就使用 mkdir (make directory)吧。</p>
+<p>语法：</p>
+<p><code>mkdir [-mp] 目录名称</code><br>选项与参数：</p>
+<p>-m ：配置文件的权限喔！直接配置，不需要看默认权限 (umask) 的脸色～<br>-p ：帮助你直接将所需要的目录(包含上一级目录)递归创建起来！<br>实例：请到&#x2F;tmp 底下尝试创建数个新目录看看：</p>
+<div class="code-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[root@www ~]# cd /tmp</span><br><span class="line">[root@www tmp]# mkdir test &lt;==创建一名为 test 的新目录</span><br><span class="line">[root@www tmp]# mkdir test1/test2/test3/test4</span><br><span class="line">mkdir: cannot create directory `test1/test2/test3/test4&#x27;:</span><br><span class="line">No such file or directory &lt;== 没办法直接创建此目录啊！</span><br><span class="line">[root@www tmp]# mkdir -p test1/test2/test3/test4</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">加了这个 -p 的选项，可以自行帮你创建多层目录！</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">实例：创建权限为 rwx--x--x 的目录。</span></span><br><span class="line"></span><br><span class="line">[root@www tmp]# mkdir -m 711 test2</span><br><span class="line">[root@www tmp]# ls -l</span><br><span class="line">drwxr-xr-x 3 root root 4096 Jul 18 12:50 test</span><br><span class="line">drwxr-xr-x 3 root root 4096 Jul 18 12:53 test1</span><br><span class="line">drwx--x--x 2 root root 4096 Jul 18 12:54 test2</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">上面的权限部分，如果没有加上 -m 来强制配置属性，系统会使用默认属性。</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">如果我们使用 -m ，如上例我们给予 -m 711 来给予新的目录 drwx--x--x 的权限。</span></span><br></pre></td></tr></table></figure></div>
+
+<p><code>rmdir (删除空的目录)</code><br>语法：</p>
+<p><code>rmdir [-p] 目录名称</code><br>选项与参数：</p>
+<p>-p ：从该目录起，一次删除多级空目录<br>删除 runoob 目录</p>
+<p>[root@www tmp]# rmdir runoob&#x2F;<br>将 mkdir 实例中创建的目录(&#x2F;tmp 底下)删除掉！</p>
+<p>[root@www tmp]# ls -l &lt;&#x3D;&#x3D;看看有多少目录存在？<br>drwxr-xr-x 3 root root 4096 Jul 18 12:50 test<br>drwxr-xr-x 3 root root 4096 Jul 18 12:53 test1<br>drwx–x–x 2 root root 4096 Jul 18 12:54 test2<br>[root@www tmp]# rmdir test &lt;&#x3D;&#x3D;可直接删除掉，没问题<br>[root@www tmp]# rmdir test1 &lt;&#x3D;&#x3D;因为尚有内容，所以无法删除！<br>rmdir: &#96;test1’: Directory not empty<br>[root@www tmp]# rmdir -p test1&#x2F;test2&#x2F;test3&#x2F;test4<br>[root@www tmp]# ls -l &lt;&#x3D;&#x3D;您看看，底下的输出中 test 与 test1 不见了！<br>drwx–x–x 2 root root 4096 Jul 18 12:54 test2<br>利用 -p 这个选项，立刻就可以将 test1&#x2F;test2&#x2F;test3&#x2F;test4 一次删除。</p>
+<p>不过要注意的是，这个 rmdir 仅能删除空的目录，你可以使用 rm 命令来删除非空目录。</p>
+<p>cp (复制文件或目录)<br>cp 即拷贝文件和目录。</p>
+<p>语法:</p>
+<p>[root@www ~]# cp [-adfilprsu] 来源档(source) 目标档(destination)<br>[root@www ~]# cp [options] source1 source2 source3 …. directory<br>选项与参数：</p>
+<p>-a：相当於 -pdr 的意思，至於 pdr 请参考下列说明；(常用)</p>
+<p>-d：若来源档为链接档的属性(link file)，则复制链接档属性而非文件本身；</p>
+<p>-f：为强制(force)的意思，若目标文件已经存在且无法开启，则移除后再尝试一次；</p>
+<p>-i：若目标档(destination)已经存在时，在覆盖时会先询问动作的进行(常用)</p>
+<p>-l：进行硬式链接(hard link)的链接档创建，而非复制文件本身；</p>
+<p>-p：连同文件的属性一起复制过去，而非使用默认属性(备份常用)；</p>
+<p>-r：递归持续复制，用於目录的复制行为；(常用)</p>
+<p>-s：复制成为符号链接档 (symbolic link)，亦即『捷径』文件；</p>
+<p>-u：若 destination 比 source 旧才升级 destination ！</p>
+<p>用 root 身份，将 root 目录下的 .bashrc 复制到 &#x2F;tmp 下，并命名为 bashrc</p>
+<p>[root@www ~]# cp ~&#x2F;.bashrc &#x2F;tmp&#x2F;bashrc<br>[root@www ~]# cp -i ~&#x2F;.bashrc &#x2F;tmp&#x2F;bashrc<br>cp: overwrite &#96;&#x2F;tmp&#x2F;bashrc’? n &lt;&#x3D;&#x3D;n 不覆盖，y 为覆盖<br>rm (移除文件或目录)<br>语法：</p>
+<p>rm [-fir] 文件或目录<br>选项与参数：</p>
+<p>-f ：就是 force 的意思，忽略不存在的文件，不会出现警告信息；<br>-i ：互动模式，在删除前会询问使用者是否动作<br>-r ：递归删除啊！最常用在目录的删除了！这是非常危险的选项！！！<br>将刚刚在 cp 的实例中创建的 bashrc 删除掉！</p>
+<p>[root@www tmp]# rm -i bashrc<br>rm: remove regular file &#96;bashrc’? y<br>如果加上 -i 的选项就会主动询问喔，避免你删除到错误的档名！</p>
+<p>mv (移动文件与目录，或修改名称)<br>语法：</p>
+<p>[root@www ~]# mv [-fiu] source destination<br>[root@www ~]# mv [options] source1 source2 source3 …. directory<br>选项与参数：</p>
+<p>-f ：force 强制的意思，如果目标文件已经存在，不会询问而直接覆盖；<br>-i ：若目标文件 (destination) 已经存在时，就会询问是否覆盖！<br>-u ：若目标文件已经存在，且 source 比较新，才会升级 (update)<br>复制一文件，创建一目录，将文件移动到目录中</p>
+<p>[root@www ~]# cd &#x2F;tmp<br>[root@www tmp]# cp ~&#x2F;.bashrc bashrc<br>[root@www tmp]# mkdir mvtest<br>[root@www tmp]# mv bashrc mvtest<br>将某个文件移动到某个目录去，就是这样做！</p>
+<p>将刚刚的目录名称更名为 mvtest2</p>
+<p>[root@www tmp]# mv mvtest mvtest2<br>Linux 文件内容查看<br>Linux 系统中使用以下命令来查看文件的内容：</p>
+<p>cat 由第一行开始显示文件内容<br>tac 从最后一行开始显示，可以看出 tac 是 cat 的倒着写！<br>nl 显示的时候，顺道输出行号！<br>more 一页一页的显示文件内容<br>less 与 more 类似，但是比 more 更好的是，他可以往前翻页！<br>head 只看头几行<br>tail 只看尾巴几行<br>你可以使用 man [命令]来查看各个命令的使用文档，如 ：man cp。</p>
+<p>cat<br>由第一行开始显示文件内容</p>
+<p>语法：</p>
+<p>cat [-AbEnTv]<br>选项与参数：</p>
+<p>-A ：相当於 -vET 的整合选项，可列出一些特殊字符而不是空白而已；<br>-b ：列出行号，仅针对非空白行做行号显示，空白行不标行号！<br>-E ：将结尾的断行字节 $ 显示出来；<br>-n ：列印出行号，连同空白行也会有行号，与 -b 的选项不同；<br>-T ：将 [tab] 按键以 ^I 显示出来；<br>-v ：列出一些看不出来的特殊字符<br>检看 &#x2F;etc&#x2F;issue 这个文件的内容：</p>
+<p>[root@www ~]# cat &#x2F;etc&#x2F;issue<br>CentOS release 6.4 (Final)<br>Kernel \r on an \m<br>tac<br>tac 与 cat 命令刚好相反，文件内容从最后一行开始显示，可以看出 tac 是 cat 的倒着写！如：</p>
+<p>[root@www ~]# tac &#x2F;etc&#x2F;issue</p>
+<p>Kernel \r on an \m<br>CentOS release 6.4 (Final)<br>nl<br>显示行号</p>
+<p>语法：</p>
+<p>nl [-bnw] 文件<br>选项与参数：</p>
+<p>-b ：指定行号指定的方式，主要有两种：<br>-b a ：表示不论是否为空行，也同样列出行号(类似 cat -n)；<br>-b t ：如果有空行，空的那一行不要列出行号(默认值)；<br>-n ：列出行号表示的方法，主要有三种：<br>-n ln ：行号在荧幕的最左方显示；<br>-n rn ：行号在自己栏位的最右方显示，且不加 0 ；<br>-n rz ：行号在自己栏位的最右方显示，且加 0 ；<br>-w ：行号栏位的占用的位数。<br>实例一：用 nl 列出 &#x2F;etc&#x2F;issue 的内容</p>
+<p>[root@www ~]# nl &#x2F;etc&#x2F;issue<br>1 CentOS release 6.4 (Final)<br>2 Kernel \r on an \m<br>more<br>一页一页翻动</p>
+<p>[root@www ~]# more &#x2F;etc&#x2F;man_db.config</p>
+<h1 id=""><a href="#" class="headerlink" title=""></a></h1><h1 id="Generated-automatically-from-man-conf-in-by-the"><a href="#Generated-automatically-from-man-conf-in-by-the" class="headerlink" title="Generated automatically from man.conf.in by the"></a>Generated automatically from man.conf.in by the</h1><h1 id="configure-script"><a href="#configure-script" class="headerlink" title="configure script."></a>configure script.</h1><h1 id="-1"><a href="#-1" class="headerlink" title=""></a></h1><h1 id="man-conf-from-man-1-6d"><a href="#man-conf-from-man-1-6d" class="headerlink" title="man.conf from man-1.6d"></a>man.conf from man-1.6d</h1><p>….(中间省略)….<br>–More–(28%) &lt;&#x3D;&#x3D; 重点在这一行喔！你的光标也会在这里等待你的命令<br>在 more 这个程序的运行过程中，你有几个按键可以按的：</p>
+<p>空白键 (space)：代表向下翻一页；<br>Enter ：代表向下翻『一行』；<br>&#x2F;字串 ：代表在这个显示的内容当中，向下搜寻『字串』这个关键字；<br>:f ：立刻显示出档名以及目前显示的行数；<br>q ：代表立刻离开 more ，不再显示该文件内容。<br>b 或 [ctrl]-b ：代表往回翻页，不过这动作只对文件有用，对管线无用。<br>less<br>一页一页翻动，以下实例输出&#x2F;etc&#x2F;man.config 文件的内容：</p>
+<p>[root@www ~]# less &#x2F;etc&#x2F;man.config</p>
+<h1 id="-2"><a href="#-2" class="headerlink" title=""></a></h1><h1 id="Generated-automatically-from-man-conf-in-by-the-1"><a href="#Generated-automatically-from-man-conf-in-by-the-1" class="headerlink" title="Generated automatically from man.conf.in by the"></a>Generated automatically from man.conf.in by the</h1><h1 id="configure-script-1"><a href="#configure-script-1" class="headerlink" title="configure script."></a>configure script.</h1><h1 id="-3"><a href="#-3" class="headerlink" title=""></a></h1><h1 id="man-conf-from-man-1-6d-1"><a href="#man-conf-from-man-1-6d-1" class="headerlink" title="man.conf from man-1.6d"></a>man.conf from man-1.6d</h1><dl><dt>….(中间省略)….</dt><dd>&lt;&#x3D;&#x3D; 这里可以等待你输入命令！<br>less 运行时可以输入的命令有：</dd></dl><p>空白键 ：向下翻动一页；<br>[pagedown]：向下翻动一页；<br>[pageup] ：向上翻动一页；<br>&#x2F;字串 ：向下搜寻『字串』的功能；<br>?字串 ：向上搜寻『字串』的功能；<br>n ：重复前一个搜寻 (与 &#x2F; 或 ? 有关！)<br>N ：反向的重复前一个搜寻 (与 &#x2F; 或 ? 有关！)<br>q ：离开 less 这个程序；<br>head<br>取出文件前面几行</p>
+<p>语法：</p>
+<p>head [-n number] 文件<br>选项与参数：</p>
+<p>-n ：后面接数字，代表显示几行的意思<br>[root@www ~]# head &#x2F;etc&#x2F;man.config<br>默认的情况中，显示前面 10 行！若要显示前 20 行，就得要这样：</p>
+<p>[root@www ~]# head -n 20 &#x2F;etc&#x2F;man.config<br>tail<br>取出文件后面几行</p>
+<p>语法：</p>
+<p>tail [-n number] 文件<br>选项与参数：</p>
+<p>-n ：后面接数字，代表显示几行的意思<br>-f ：表示持续侦测后面所接的档名，要等到按下[ctrl]-c 才会结束 tail 的侦测<br>[root@www ~]# tail &#x2F;etc&#x2F;man.config</p>
+<h1 id="默认的情况中，显示最后的十行！若要显示最后的-20-行，就得要这样："><a href="#默认的情况中，显示最后的十行！若要显示最后的-20-行，就得要这样：" class="headerlink" title="默认的情况中，显示最后的十行！若要显示最后的 20 行，就得要这样："></a>默认的情况中，显示最后的十行！若要显示最后的 20 行，就得要这样：</h1><p>[root@www ~]# tail -n 20 &#x2F;etc&#x2F;man.config</p>
+
+		</div>
+
+		
+		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+			<div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> Linux Shell</li>
+        <li><strong>Author:</strong> ZH1</li>
+        <li><strong>Created at
+                :</strong> 2024-10-24 11:06:05</li>
+        
+            <li>
+                <strong>Updated at
+                    :</strong> 2025-12-25 02:55:56
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://zh1.fun/2024/10/24/Shell/
+        </li>
+        <li>
+            <strong>
+                License:
+            </strong>
+            
+
+            
+                This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
+            
+        </li>
+    </ul>
+</div>
+
+		</div>
+		
+
+		
+		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/Linux/">#Linux</a>&nbsp;
+			</li>
+			
+		</ul>
+		
+
+		
+
+		
+		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+			
+			<div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="prev" rel="prev" href="/2025/04/10/D3-js%E5%AD%A6%E4%B9%A0/">
+					<span class="left arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-left"></i>
+					</span>
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">D3.js学习</span>
+						<span class="post-nav-item">Prev posts</span>
+					</span>
+				</a>
+			</div>
+			
+			
+			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="next" rel="next" href="/2024/09/30/2024%E5%B9%B49%E6%9C%8830%E6%97%A5/">
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">日记 2024年9月30日</span>
+						<span class="post-nav-item">Next posts</span>
+					</span>
+					<span class="right arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-right"></i>
+					</span>
+				</a>
+			</div>
+			
+		</div>
+		
+
+
+		
+	</div>
+
+	
+	<div class="toc-content-container">
+		<div class="post-toc-wrap">
+	<div class="post-toc">
+		<div class="toc-title">On this page</div>
+		<div class="page-title">Linux Shell</div>
+		<ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%99%BB%E5%BD%95%E4%BA%91"><span class="nav-text">登录云</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%84%E7%90%86%E7%9B%AE%E5%BD%95%E7%9A%84%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="nav-text">处理目录的常用命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text"></span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Generated-automatically-from-man-conf-in-by-the"><span class="nav-text">Generated automatically from man.conf.in by the</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#configure-script"><span class="nav-text">configure script.</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#-1"><span class="nav-text"></span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#man-conf-from-man-1-6d"><span class="nav-text">man.conf from man-1.6d</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#-2"><span class="nav-text"></span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Generated-automatically-from-man-conf-in-by-the-1"><span class="nav-text">Generated automatically from man.conf.in by the</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#configure-script-1"><span class="nav-text">configure script.</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#-3"><span class="nav-text"></span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#man-conf-from-man-1-6d-1"><span class="nav-text">man.conf from man-1.6d</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%BB%98%E8%AE%A4%E7%9A%84%E6%83%85%E5%86%B5%E4%B8%AD%EF%BC%8C%E6%98%BE%E7%A4%BA%E6%9C%80%E5%90%8E%E7%9A%84%E5%8D%81%E8%A1%8C%EF%BC%81%E8%8B%A5%E8%A6%81%E6%98%BE%E7%A4%BA%E6%9C%80%E5%90%8E%E7%9A%84-20-%E8%A1%8C%EF%BC%8C%E5%B0%B1%E5%BE%97%E8%A6%81%E8%BF%99%E6%A0%B7%EF%BC%9A"><span class="nav-text">默认的情况中，显示最后的十行！若要显示最后的 20 行，就得要这样：</span></a></li></ol>
+
+	</div>
+</div>
+	</div>
+	
+</div>
+			</div>
+
+			
+		</div>
+
+		<div class="main-content-footer">
+			<footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2024</span>
+              -
+            
+            2025&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">ZH1</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        14 posts in total
+                    </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">VISITOR COUNT</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">TOTAL PAGE VIEWS</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a></span>
+            <span class="text-sm lg:block">THEME&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.8.5</a></span>
+        </div>
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+		</div>
+	</div>
+
+	
+	<div class="post-tools">
+		<div class="post-tools-container">
+	<ul class="article-tools-list">
+		<!-- TOC aside toggle -->
+		
+		<li class="right-bottom-tools page-aside-toggle">
+			<i class="fa-regular fa-outdent"></i>
+		</li>
+		
+
+		<!-- go comment -->
+		
+	</ul>
+</div>
+	</div>
+	
+
+	<div class="right-side-tools-container">
+		<div class="side-tools-container">
+	<ul class="hidden-tools-list">
+		<li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-plus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-minus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+			<i class="fa-regular fa-moon"></i>
+		</li>
+
+		<!-- rss -->
+		
+
+		
+
+		<li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+			<i class="fa-regular fa-arrow-down"></i>
+		</li>
+	</ul>
+
+	<ul class="visible-tools-list">
+		<li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+			<i class="fa-regular fa-cog fa-spin"></i>
+		</li>
+		
+		<li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+			<i class="arrow-up fas fa-arrow-up"></i>
+			<span class="percent"></span>
+		</li>
+		
+		
+	</ul>
+</div>
+	</div>
+
+	<div class="image-viewer-container">
+	<img src="">
+</div>
+
+	
+	<div class="search-pop-overlay">
+	<div class="popup search-popup">
+		<div class="search-header">
+			<span class="search-input-field-pre">
+				<i class="fa-solid fa-keyboard"></i>
+			</span>
+			<div class="search-input-container">
+				<input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="Search..." spellcheck="false" type="search" class="search-input">
+			</div>
+			<span class="popup-btn-close">
+				<i class="fa-solid fa-times"></i>
+			</span>
+		</div>
+		<div id="search-result">
+			<div id="no-result">
+				<i class="fa-solid fa-spinner fa-spin-pulse fa-5x fa-fw"></i>
+			</div>
+		</div>
+	</div>
+</div>
+	
+
+</main>
+
+
+
+<script src="/js/build/libs/Swup.min.js"></script>
+
+<script src="/js/build/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/build/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+	
+<script src="/js/build/tools/imageViewer.js" type="module"></script>
+
+<script src="/js/build/utils.js" type="module"></script>
+
+<script src="/js/build/main.js" type="module"></script>
+
+<script src="/js/build/layouts/navbarShrink.js" type="module"></script>
+
+<script src="/js/build/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="/js/build/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="/js/build/layouts/categoryList.js" type="module"></script>
+
+
+
+    
+<script src="/js/build/tools/localSearch.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/tools/codeBlock.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/layouts/lazyload.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/tools/runtime.js"></script>
+
+    
+<script src="/js/build/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/build/libs/Typed.min.js"></script>
+
+  
+<script src="/js/build/plugins/typed.js" type="module"></script>
+
+
+
+
+
+
+
+
+    
+<script src="/js/build/libs/anime.min.js"></script>
+
+
+
+
+
+    
+<script src="/js/build/tools/tocToggle.js" type="module" data-swup-reload-script=""></script>
+
+<script src="/js/build/layouts/toc.js" type="module" data-swup-reload-script=""></script>
+
+<script src="/js/build/plugins/tabs.js" type="module" data-swup-reload-script=""></script>
+
+
+
+
+<script src="/js/build/libs/moment-with-locales.min.js" data-swup-reload-script=""></script>
+
+
+<script src="/js/build/layouts/essays.js" type="module" data-swup-reload-script=""></script>
+
+
+
+
+
+	
+	<div id="aplayer"></div>
+
+<script src="/js/build/libs/APlayer.min.js"></script>
+
+
+<script src="/js/build/plugins/aplayer.js"></script>
+
+
+	
+</body>
+
+</html>
